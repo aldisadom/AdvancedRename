@@ -13,7 +13,18 @@ internal class Program
 
         RenamerService service = new RenamerService(configuration);
 
-        service.Rename();
+        string _outDirectory = Directory.GetCurrentDirectory() + "\\output";
+    
+        if (Directory.Exists(_outDirectory))
+            Directory.Delete(_outDirectory,true);
+
+        Directory.CreateDirectory(_outDirectory);
+
+        foreach (TemplateName template in Enum.GetValues(typeof(TemplateName)))
+        {
+            configuration.Template = template;
+            service.Rename();
+        }        
 
         Console.WriteLine("Renamer finished");
     }

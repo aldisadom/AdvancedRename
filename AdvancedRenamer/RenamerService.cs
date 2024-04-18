@@ -58,6 +58,7 @@ internal class RenamerService
 
     private void GenerateListForTemplate()
     {
+        GenerateList.Clear();
         GenerateList.Add(new GenerateData(["Tag_to_replace", "Operative_to_replace", "Units_to_replace"]));
 
         switch (_configuration.Template)
@@ -145,10 +146,15 @@ internal class RenamerService
     {
         GenerateListForTemplate();
 
+        string directory = _outDirectory + "\\" + _configuration.Template.ToString();
         foreach (GenerateData item in GenerateList)
         {
             GenerateMapForTemplate(item);
-            string[] outputFiles = inputFiles.Select(f => f.Replace(pathInput, _outDirectory).Replace(_replaceList.Data[0], item.Data[0])).ToArray();
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            string[] outputFiles = inputFiles.Select(f => f.Replace(pathInput, directory)
+                                                            .Replace(_replaceList.Data[0], item.Data[0])).ToArray();
             RenameFiles(inputFiles, outputFiles);
         }
     }
@@ -174,21 +180,8 @@ internal class RenamerService
             RenameFile(inFiles[i], outFiles[i]);
     }
 
-    private void DeleteOutputFiles()
-    {
-        string[] files = Directory.GetFiles(_outDirectory);
-
-        for (int i = 0; i < files.Length; i++)
-            File.Delete(files[i]);
-    }
-
     public void Rename()
     {
-        if (!Directory.Exists(_outDirectory))
-            Directory.CreateDirectory(_outDirectory);
-
-        DeleteOutputFiles();
-
         if (_configuration.Generate)
         {
             string pathInput = _workDirectory + "\\templates\\" + _configuration.Template.ToString();

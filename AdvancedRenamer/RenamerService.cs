@@ -8,21 +8,6 @@ using System.Threading.Tasks;
 
 namespace AdvancedRenamer;
 
-public class DataMap
-{
-    public string From { get; set; } = string.Empty;
-    public string To { get; set; } = string.Empty;
-}
-
-public class GenerateData
-{
-    public List<string> Data { get; set; }
-    public GenerateData(string[] data)
-    {
-        Data = data.ToList();
-    }
-}
-
 public enum TemplateName
 {
     VLVA,
@@ -33,17 +18,11 @@ public enum TemplateName
     SEQ
 }
 
-public class Configuration
-{
-    public bool Generate;
-    public TemplateName Template;
-}
-
 internal class RenamerService
 {
-    private List<DataMap> DataMaps = new List<DataMap>();
-    private List<GenerateData> GenerateList = new List<GenerateData>();
+    private List<RenameMap> DataMaps { get; set; } = new ();
 
+    private readonly List<GenerateData> GenerateList = new ();
     private readonly string _workDirectory = Directory.GetCurrentDirectory();
     private readonly string _outDirectory = string.Empty;
     private readonly GenerateData _replaceList;
@@ -138,7 +117,7 @@ internal class RenamerService
 
         for (int i = 0; i < item.Data.Count; i++)
         {
-            DataMaps.Add(new DataMap() { From = _replaceList.Data[i], To = item.Data[i] });
+            DataMaps.Add(new RenameMap() { From = _replaceList.Data[i], To = item.Data[i] });
         }
     }
 

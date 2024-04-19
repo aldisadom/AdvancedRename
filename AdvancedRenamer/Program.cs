@@ -2,16 +2,17 @@
 
 internal class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         Console.WriteLine("Renamer started");
         Configuration configuration = new()
         {
             Template = TemplateName.VLVD,
-            Generate = true
+            Generate = true,
+            Rename = true,
         };
 
-        RenamerService service = new RenamerService(configuration);
+        RenamerService service = new (configuration);
 
         string _outDirectory = Directory.GetCurrentDirectory() + "\\output";
     

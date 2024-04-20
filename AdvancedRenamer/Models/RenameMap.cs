@@ -1,4 +1,4 @@
-﻿namespace AdvancedRenamer.Models;
+﻿namespace AdvancedRename.Models;
 
 public class RenameMap
 {

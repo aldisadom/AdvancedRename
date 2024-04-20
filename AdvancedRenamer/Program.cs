@@ -1,7 +1,7 @@
-﻿using AdvancedRenamer.Models;
-using AdvancedRenamer.Services;
+﻿using AdvancedRename.Models;
+using AdvancedRename.Services;
 
-namespace AdvancedRenamer;
+namespace AdvancedRename;
 
 internal class Program
 {
@@ -10,18 +10,18 @@ internal class Program
         Console.WriteLine("Advanced rename started");
 
         string workDirectory = Directory.GetCurrentDirectory();
-        Configuration configuration = new(workDirectory);
+        ConfigurationService configuration = new(workDirectory);
         configuration.Read();
         ClearOutput(workDirectory);
         CheckInputFolders(workDirectory);
         CheckCFGFiles(workDirectory, configuration);
 
-        if (configuration.Generate)
+        if (configuration.Settings.Options == Options.Generate)
         {
             GeneratorService service = new(configuration, workDirectory);
             service.Generate();
         }
-        else
+        else if (configuration.Settings.Options == Options.Rename)
         {
             RenameService service = new(configuration, workDirectory);
             service.Rename();
@@ -43,25 +43,26 @@ internal class Program
             Directory.CreateDirectory(directory);
     }
 
-    private static void CheckCFGFiles(string workDirectory, Configuration configuration)
+    private static void CheckCFGFiles(string workDirectory, ConfigurationService configuration)
     {
         string file = workDirectory + "\\Map.csv";
         string data = string.Empty;
+        string delimiter = configuration.Settings.DelimiterCSV;
 
         if (!File.Exists(file))
         {
-            data = $"From{configuration.DelimiterCSV}To\r\n" +
-                    $"Text to be replaced{configuration.DelimiterCSV}New text\r\n";
+            data = $"From{delimiter}To\r\n" +
+                    $"Text to be replaced{delimiter}New text\r\n";
             File.WriteAllText(file, data);
         }
 
         file = workDirectory + "\\Generate.csv";
-        
+
         if (!File.Exists(file))
         {
-            data = $"Template{configuration.DelimiterCSV}Tag_to_replace{configuration.DelimiterCSV}Tag_to_replace2\r\n" +
+            data = $"Template{delimiter}Tag_to_replace{delimiter}Tag_to_replace2\r\n" +
                     $"#First column is template, other columns are for text to be replaced\r\n" +
-                    $"VLVA{configuration.DelimiterCSV}LBG21AA151{configuration.DelimiterCSV}New text\r\n";
+                    $"VLVA{delimiter}LBG21AA151{delimiter}New text\r\n";
             File.WriteAllText(file, data);
         }
     }

@@ -1,7 +1,7 @@
-﻿using AdvancedRenamer.Models;
+﻿using AdvancedRename.Models;
 using Microsoft.VisualBasic.FileIO;
 
-namespace AdvancedRenamer.Services;
+namespace AdvancedRename.Services;
 
 internal class RenameService
 {
@@ -10,9 +10,9 @@ internal class RenameService
     private readonly string[] _inputFiles;
     private readonly string[] _outputFiles;
 
-    private readonly Configuration _configuration;
+    private readonly ConfigurationService _configuration;
 
-    public RenameService(Configuration configuration, string workDirectory)
+    public RenameService(ConfigurationService configuration, string workDirectory)
     {
         string outPath = workDirectory + "\\output";
         string filePath = workDirectory + "\\input";
@@ -22,7 +22,7 @@ internal class RenameService
         _outputFiles = _inputFiles.Select(f => f.Replace(filePath, outPath)).ToArray();
         GenerateMap(workDirectory);
     }
-    public RenameService(Configuration configuration, string[] inputFiles, string[] outputFiles)
+    public RenameService(ConfigurationService configuration, string[] inputFiles, string[] outputFiles)
     {
         _configuration = configuration;
 
@@ -36,15 +36,15 @@ internal class RenameService
         using (TextFieldParser csvParser = new(path))
         {
             csvParser.CommentTokens = ["#"];
-            csvParser.SetDelimiters([_configuration.DelimiterCSV]);
+            csvParser.SetDelimiters([_configuration.Settings.DelimiterCSV]);
             csvParser.HasFieldsEnclosedInQuotes = true;
-            
+
             while (!csvParser.EndOfData)
             {
                 // Read current line fields, pointer moves to the next line.
                 string[] fields = csvParser.ReadFields()!;
 
-                DataMaps.Add(new RenameMap () { From = fields[0], To = fields[1] });
+                DataMaps.Add(new RenameMap() { From = fields[0], To = fields[1] });
             }
         }
     }

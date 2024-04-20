@@ -1,7 +1,7 @@
-﻿using AdvancedRenamer.Models;
+﻿using AdvancedRename.Models;
 using Microsoft.VisualBasic.FileIO;
 
-namespace AdvancedRenamer.Services;
+namespace AdvancedRename.Services;
 
 internal class GeneratorService
 {
@@ -11,9 +11,9 @@ internal class GeneratorService
 
     private readonly string _workDirectory;
     private readonly string _outDirectory;
-    private readonly Configuration _configuration;
+    private readonly ConfigurationService _configuration;
 
-    public GeneratorService(Configuration configuration, string workDirectory)
+    public GeneratorService(ConfigurationService configuration, string workDirectory)
     {
         _workDirectory = workDirectory;
         _outDirectory = workDirectory + "\\output";
@@ -29,7 +29,7 @@ internal class GeneratorService
         using (TextFieldParser csvParser = new(path))
         {
             csvParser.CommentTokens = ["#"];
-            csvParser.SetDelimiters([_configuration.DelimiterCSV]);
+            csvParser.SetDelimiters([_configuration.Settings.DelimiterCSV]);
             csvParser.HasFieldsEnclosedInQuotes = true;
             // Skip the row with the column names
             string[] text = csvParser.ReadFields()!;
@@ -55,11 +55,11 @@ internal class GeneratorService
     {
         for (int i = 0; i < generateDataList.Data.Count; i++)
         {
-            renameService.DataMaps.Add(new RenameMap() 
-                                    { 
-                                        From = _replaceList[i],
-                                        To = generateDataList.Data[i]
-                                    });
+            renameService.DataMaps.Add(new RenameMap()
+            {
+                From = _replaceList[i],
+                To = generateDataList.Data[i]
+            });
         }
     }
 
@@ -76,11 +76,17 @@ internal class GeneratorService
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
-            string[] outputFiles = inputFiles.Select(f => f.Replace(pathInput, directory)
+            string[] outputFiles;
+
+            if (_configuration.Settings.Rename.RenameFiles)
+                outputFiles = inputFiles.Select(f => f.Replace(pathInput, directory)
                                                             .Replace(_replaceList[0], generateDataList.Data[0])).ToArray();
-            if (_configuration.Rename)
+            else
+                outputFiles = inputFiles;
+
+            if (_configuration.Settings.Rename.RenameContent)
             {
-                RenameService service = new(_configuration, inputFiles,outputFiles);
+                RenameService service = new(_configuration, inputFiles, outputFiles);
                 GenerateMapForTemplate(service, generateDataList);
                 service.Rename();
             }
@@ -97,7 +103,7 @@ internal class GeneratorService
         GenerateListForTemplate();
         string pathInput;
 
-        List <string> templates = _generateList.Select(l => l.Template).Distinct().ToList();
+        List<string> templates = _generateList.Select(l => l.Template).Distinct().ToList();
         foreach (string template in templates)
         {
             pathInput = _workDirectory + "\\templates\\" + template;

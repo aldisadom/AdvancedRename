@@ -1,5 +1,6 @@
 ﻿using AdvancedRename.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace AdvancedRename.Services;
 
@@ -34,7 +35,7 @@ public class ConfigurationService
 
         try
         {
-            Settings = JsonConvert.DeserializeObject<ConfigurationSettings>(text)!;
+            Settings = JsonConvert.DeserializeObject<ConfigurationSettings>(text, new StringEnumConverter())!;
         }
         catch (Exception)
         {
@@ -47,7 +48,7 @@ public class ConfigurationService
     public void Write()
     {
         string text = Settings.AddComments();
-        text += JsonConvert.SerializeObject(Settings, Formatting.Indented);
+        text += JsonConvert.SerializeObject(Settings, Formatting.Indented, new StringEnumConverter());
         File.WriteAllText(_fileName, text);
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedRename", "AdvancedRenamer\AdvancedRename.csproj", "{83E1A62B-52A1-454B-AF6F-0994E8271635}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedRename", "AdvancedRename\AdvancedRename.csproj", "{AA43CDA6-E974-4340-BF64-4A5F7B05C39E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{83E1A62B-52A1-454B-AF6F-0994E8271635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83E1A62B-52A1-454B-AF6F-0994E8271635}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83E1A62B-52A1-454B-AF6F-0994E8271635}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83E1A62B-52A1-454B-AF6F-0994E8271635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA43CDA6-E974-4340-BF64-4A5F7B05C39E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA43CDA6-E974-4340-BF64-4A5F7B05C39E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA43CDA6-E974-4340-BF64-4A5F7B05C39E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA43CDA6-E974-4340-BF64-4A5F7B05C39E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2E68287A-6C67-44E1-BAD8-9C4FDB0CDD2A}
+		SolutionGuid = {E6D2F034-2057-4C35-9E0F-29FC45759745}
 	EndGlobalSection
 EndGlobal
